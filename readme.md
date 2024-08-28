@@ -2,12 +2,13 @@
 
 ## optons
 
-| Option           | Description                         |
-| ---------------- | ----------------------------------- |
-| -n, --quiet      | not print the pattern space         |
-| -e, --expression | the commands to be executed         |
-| -f, --file       | the file containing the script      |
-| -i, --in-place   | make the changes in a file directly |
+| Option                | Description                         |
+| --------------------- | ----------------------------------- |
+| -n, --quiet           | not print the pattern space         |
+| -e, --expression      | the commands to be executed         |
+| -f, --file            | the file containing the script      |
+| -i, --in-place        | make the changes in a file directly |
+| -r, --regexp-extended | use extended regular expressions    |
 
 ## commands
 
