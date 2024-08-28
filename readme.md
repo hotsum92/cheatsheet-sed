@@ -32,9 +32,9 @@
 | q        | branch to end                                  |
 | Q        | quit immediately                    |
 | r        | write the contents of a file to standard output before reading next line |
-| R        | read line from file                 |
-| s        | substitute                          |
-| t        | test for substitution               |
+| R        | write one line of a file to standard output before reading next line     |
+| s/././f  | substitute                          |
+| t[label] | test for substitution               |
 | T        | test for no substitution            |
 | y        | simple character replace            |
 | w        | write to file                       |
@@ -63,6 +63,7 @@ seq 3 | sed = | sed 'N;s/\n/\t/'                    # 1\n1\n2\n2\n3\n3
 seq 2 | sed -n '1!p'                                # 2
 seq 2 | sed -n '1q'                                 #
 seq 2 | sed -n 'N;P'                                # 1
+seq 3 | sed 's/[12]/?/; t; s/./!/'                     # 1\n?\n3
 ```
 
 ## oneliners
