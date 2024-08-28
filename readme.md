@@ -11,38 +11,38 @@
 
 ## commands
 
-| Command  | Description                       |
-| -------- | --------------------------------- |
-| a        | append                            |
-| b        | branch                            |
-| c        | change text                       |
-| d        | delete lines                      |
-| D        | delete first line in patternspace |
-| e        | execute on the command line       |
-| g        | copy from holdspace               |
-| G        | append from holdspace             |
-| h        | copy to hold space                |
-| H        | append to hold space              |
-| i        | insert                            |
-| l        | print substitute line feeds       |
-| n        | next input line                   |
-| N        | append next input line            |
-| p        | print                             |
-| P        | print first line                  |
-| q        | quit                              |
-| Q        | quit immediately                  |
-| r        | read file                         |
-| R        | read line from file               |
-| s        | substitute                        |
-| t        | test for substitution             |
-| T        | test for no substitution          |
-| y        | simple character replace          |
-| w        | write to file                     |
-| W        | write line to file                |
-| z        | clear line (zap)                  |
-| x        | exchange pattern and hold space   |
-| =        | print line number                 |
-| :[label] | define label                      |
+| Command  | Description                         |
+| -------- | ----------------------------------- |
+| a        | write text to standard output before reading next line |
+| b[label] | branch to [label]                                      |
+| c        | delete patternspace and write text to standard output  |
+| d        | delete patternspace and start next cycle               |
+| D        | delete first line in patternspace and start next cycle |
+| e        | execute on the command line         |
+| g        | replace patternspace with holdspace |
+| G        | append \n holdspace to patternspace |
+| h        | replace holdspace with patternspace |
+| H        | append \n patternspace to holdspace |
+| i        | write text to standard output       |
+| l        | write patternspace in a visually unambiguous form                          |
+| n        | write patternspace to standard output, replace patternspace with next line |
+| N        | append next line to patternspace               |
+| p        | write patternspace to standard output          |
+| P        | write patternspace up to \n to standard output |
+| q        | branch to end                                  |
+| Q        | quit immediately                    |
+| r        | write the contents of a file to standard output before reading next line |
+| R        | read line from file                 |
+| s        | substitute                          |
+| t        | test for substitution               |
+| T        | test for no substitution            |
+| y        | simple character replace            |
+| w        | write to file                       |
+| W        | write line to file                  |
+| z        | clear line (zap)                    |
+| x        | exchange pattern and hold space     |
+| =        | print line number                   |
+| :[label] | define label                        |
 
 ### examples
 
@@ -58,7 +58,11 @@ seq 3 | sed -n '/2/h; g;p'                          # \n2\n2
 seq 3 | sed 'G'                                     # 1\n\n2\n\n3\n\n
 seq 3 | sed 'n;d'                                   # 1\n3
 seq 3 | sed '/2/{x;p;x;}'                           # 1\n\n2\n3
+echo -e 'a\tb' | sed 'l;d'                          # a\tb
 seq 3 | sed = | sed 'N;s/\n/\t/'                    # 1\n1\n2\n2\n3\n3
+seq 2 | sed -n '1!p'                                # 2
+seq 2 | sed -n '1q'                                 #
+seq 2 | sed -n 'N;P'                                # 1
 ```
 
 ## oneliners
