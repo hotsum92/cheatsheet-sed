@@ -12,38 +12,37 @@
 
 ## commands
 
-| Command  | Description                         |
-| -------- | ----------------------------------- |
-| a        | write text to standard output before reading next line |
-| b[label] | branch to [label]                                      |
-| c        | delete patternspace and write text to standard output  |
-| d        | delete patternspace and start next cycle               |
-| D        | delete first line in patternspace and start next cycle |
-| e        | execute on the command line         |
-| g        | replace patternspace with holdspace |
-| G        | append \n holdspace to patternspace |
-| h        | replace holdspace with patternspace |
-| H        | append \n patternspace to holdspace |
-| i        | write text to standard output       |
+| Command  | Description                                                                |
+| -------- | -------------------------------------------------------------------------- |
+| a        | write text to standard output before reading next line                     |
+| b[label] | branch to [label]                                                          |
+| c        | delete patternspace and write text to standard output                      |
+| d        | delete patternspace and start next cycle                                   |
+| D        | delete first line in patternspace and start next cycle                     |
+| e        | execute on the command line                                                |
+| g        | replace patternspace with holdspace                                        |
+| G        | append \n holdspace to patternspace                                        |
+| h        | replace holdspace with patternspace                                        |
+| H        | append \n patternspace to holdspace                                        |
+| i        | write text to standard output                                              |
 | l        | write patternspace in a visually unambiguous form                          |
 | n        | write patternspace to standard output, replace patternspace with next line |
-| N        | append next line to patternspace               |
-| p        | write patternspace to standard output          |
-| P        | write patternspace up to \n to standard output |
-| q        | branch to end                                  |
-| Q        | quit immediately                    |
-| r        | write the contents of a file to standard output before reading next line |
-| R        | write one line of a file to standard output before reading next line     |
-| s/././f  | substitute                          |
-| t[label] | test for substitution               |
-| T        | test for no substitution            |
-| y        | simple character replace            |
-| w        | write to file                       |
-| W        | write line to file                  |
-| z        | clear line (zap)                    |
-| x        | exchange pattern and hold space     |
-| =        | print line number                   |
-| :[label] | define label                        |
+| N        | append next line to patternspace                                           |
+| p        | write patternspace to standard output                                      |
+| P        | write patternspace up to \n to standard output                             |
+| q        | branch to end                                                              |
+| Q        | quit immediately                                                           |
+| r        | write the contents of a file to standard output before reading next line   |
+| R        | write one line of a file to standard output before reading next line       |
+| s/././f  | substitute                                                                 |
+| t[label] | branch on successful substitution                                          |
+| T[label] | branch on failed substitution                                              |
+| y        | simple character replace                                                   |
+| w        | write patterspace to file                                                  |
+| W        | write first line of pattern space to file                                  |
+| x        | exchange pattern and hold space                                            |
+| =        | print line number                                                          |
+| :[label] | define label                                                               |
 
 ### examples
 
@@ -64,14 +63,63 @@ seq 3 | sed = | sed 'N;s/\n/\t/'                    # 1\n1\n2\n2\n3\n3
 seq 2 | sed -n '1!p'                                # 2
 seq 2 | sed -n '1q'                                 #
 seq 2 | sed -n 'N;P'                                # 1
-seq 3 | sed 's/[12]/?/; t; s/./!/'                     # 1\n?\n3
+seq 3 | sed 's/[13]/&/; t; s/./& O/'                # 1 O\n2 O\n3
+seq 3 | sed 's/[13]/&/; T; s/./& O/'                # 1\n2 O\n3
+echo 'baz foo' | sed '/baz/!s/foo/bar/g'            # baz foo
+echo '[]' | sed 'y/[]/()/'                          # ()
+seq 3 | sed '1h; 3x;'                               # 1\n2\n1
+seq 3 | sed '=' | sed 'N;s/\n/\t/'                  # 1\t2\n3\t
+echo puce | sed 's/scarlet\|ruby\|puce/red/g'       # red
 ```
 
 ## oneliners
 
+### whitespace to one space
+
+```
+echo '   a    b ' |
+sed -e 's/^[ \t]*//' -e 's/[ \t]*$//' -e 's/[ \t][ \t]*/ /g'
+# a b
+```
+
+
 ### replace line endings with spaces
 
 ```
-echo -e '1\n2' | sed -e :loop -e 'N; $!b loop' -e 's/\n/ /g' # 1 2
+echo -e '1\n2' |
+sed -e :loop -e 'N; $!b loop' -e 's/\n/ /g'
+# 1 2
 ```
+
+### number each non-empty line
+
+```
+echo -e '1\n\n3\n\n5' |
+sed '/./=' | sed '/./N; s/\n/ /'
+# 1 1\n\n3 3\n\n5 5
+```
+
+### convert DOS/Windows newlines (CRLF) to Unix newlines (LF)
+
+```
+sed 's/.$//'
+sed 's/^M$//'
+sed 's/\x0D$//'
+```
+
+### convert Unix newlines (LF) to DOS/Windows newlines (CRLF)
+
+```
+sed "s/$/`echo -e \\\r`/"
+sed 's/$/\r/'
+```
+
+### Digit grouping
+
+```
+echo 1234567 |
+sed -e :a -e 's/\(.*[0-9]\)\([0-9]\{3\}\)/\1,\2/;ta'
+# 1,234,567
+```
+
 
