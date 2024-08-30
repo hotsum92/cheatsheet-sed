@@ -2,47 +2,47 @@
 
 ## optons
 
-| Option                | Description                         |
-| --------------------- | ----------------------------------- |
-| -n, --quiet           | not print the pattern space         |
-| -e, --expression      | the commands to be executed         |
-| -f, --file            | the file containing the script      |
-| -i, --in-place        | make the changes in a file directly |
-| -r, --regexp-extended | use extended regular expressions    |
+| Option                   | Description                         |
+| ------------------------ | ----------------------------------- |
+| -n, --quiet              | not print the pattern space         |
+| -e, --expression         | the commands to be executed         |
+| -f, --file               | the file containing the script      |
+| -i, --in-place           | make the changes in a file directly |
+| -E,-r, --regexp-extended | use extended regular expressions    |
 
 ## commands
 
-| Command  | Description                                                                |
-| -------- | -------------------------------------------------------------------------- |
-| a        | write text to standard output before reading next line                     |
-| b[label] | branch to [label]                                                          |
-| c        | delete patternspace and write text to standard output                      |
-| d        | delete patternspace and start next cycle                                   |
-| D        | delete first line in patternspace and start next cycle                     |
-| e        | execute on the command line                                                |
-| g        | replace patternspace with holdspace                                        |
-| G        | append \n holdspace to patternspace                                        |
-| h        | replace holdspace with patternspace                                        |
-| H        | append \n patternspace to holdspace                                        |
-| i        | write text to standard output                                              |
-| l        | write patternspace in a visually unambiguous form                          |
-| n        | write patternspace to standard output, replace patternspace with next line |
-| N        | append next line to patternspace                                           |
-| p        | write patternspace to standard output                                      |
-| P        | write patternspace up to \n to standard output                             |
-| q        | branch to end                                                              |
-| Q        | quit immediately                                                           |
-| r        | write the contents of a file to standard output before reading next line   |
-| R        | write one line of a file to standard output before reading next line       |
-| s/././f  | substitute                                                                 |
-| t[label] | branch on successful substitution                                          |
-| T[label] | branch on failed substitution                                              |
-| y        | simple character replace                                                   |
-| w        | write patterspace to file                                                  |
-| W        | write first line of pattern space to file                                  |
-| x        | exchange pattern and hold space                                            |
-| =        | print line number                                                          |
-| :[label] | define label                                                               |
+| Command      | Description                                                                |
+| ------------ | -------------------------------------------------------------------------- |
+| a            | write text to standard output before reading next line                     |
+| b[label]     | branch to [label]                                                          |
+| c            | delete patternspace and write text to standard output                      |
+| d            | delete patternspace and start next cycle                                   |
+| D            | delete first line in patternspace and start next cycle                     |
+| e            | execute on the command line                                                |
+| g            | replace patternspace with holdspace                                        |
+| G            | append \n holdspace to patternspace                                        |
+| h            | replace holdspace with patternspace                                        |
+| H            | append \n patternspace to holdspace                                        |
+| i            | write text to standard output                                              |
+| l            | write patternspace in a visually unambiguous form                          |
+| n            | write patternspace to standard output, replace patternspace with next line |
+| N            | append next line to patternspace                                           |
+| p            | write patternspace to standard output                                      |
+| P            | write patternspace up to \n to standard output                             |
+| q            | branch to end                                                              |
+| Q            | quit immediately                                                           |
+| r            | write the contents of a file to standard output before reading next line   |
+| R            | write one line of a file to standard output before reading next line       |
+| s/././[flag] | substitute                                                                 |
+| t[label]     | branch on successful substitution                                          |
+| T[label]     | branch on failed substitution                                              |
+| y            | simple character replace                                                   |
+| w            | write patterspace to file                                                  |
+| W            | write first line of pattern space to file                                  |
+| x            | exchange pattern and hold space                                            |
+| =            | print line number                                                          |
+| :[label]     | define label                                                               |
 
 ### examples
 
@@ -120,6 +120,30 @@ sed 's/$/\r/'
 echo 1234567 |
 sed -e :a -e 's/\(.*[0-9]\)\([0-9]\{3\}\)/\1,\2/;ta'
 # 1,234,567
+```
+
+### camelCase(PascalCase) to snake_case
+
+```
+echo 'camelCase' |
+sed -E 's/(.)([A-Z])/\1_\2/g' | tr '[A-Z]' '[a-z]'
+# camel_case
+```
+
+### snake_case to camelCase
+
+```
+echo 'snake_case' |
+sed -r 's/(_)(.)/\u\2/g'
+# snakeCase
+```
+
+### PascalCase to snake_case
+
+```
+echo 'PascalCase' |
+sed -r 's/(\b|_)(.)/\u\2/g'
+# pascal_case
 ```
 
 
