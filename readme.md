@@ -72,6 +72,22 @@ seq 3 | sed '=' | sed 'N;s/\n/\t/'                  # 1\t2\n3\t
 echo puce | sed 's/scarlet\|ruby\|puce/red/g'       # red
 ```
 
+## BRE ERE
+
+| name                              | BRE            | ERE            |
+| --------------------------------- | -------------- | -------------- |
+| Collation-related bracket symbols | [==] [::] [..] | [==] [::] [..] |
+| Escaped characters                | \              | \              |
+| Bracket expression                | []             | []             |
+| Grouping                          | \(\) \n        | () \n          |
+| Single-character duplication      | * \{m,n\}      | * + ? {m,n}    |
+| Anchoring                         | ^ $            | ^ $            |
+
+## need to escape
+
+BRE .[\*^$
+ERE .[\*^$()+?{|
+
 ## oneliners
 
 ### insert block upper
@@ -158,4 +174,20 @@ sed -r 's/(\b|_)(.)/\u\2/g'
 # pascal_case
 ```
 
+## restore backup files
 
+```
+ls *.bak | sed 's/\(.*\).bak/mv & \1/' | bash
+```
+
+## fixed string replacement
+
+Only two characters it can't deal with are the null (\x00) and the newline (\x0a)
+
+```
+OUTER_STRING='hello $( string | is [ a ${ crazy } mess ] like wow; end'
+INNER_STRING=' $( string | is [ a ${ crazy } mess ] like wow; en'
+
+echo "$INNER_STRING" | sed 's:[]\[^$.*/]:\\&:g' | cat
+echo "$OUTER_STRING" | sed "s/$CLEAN_SED_STRING/ worl/"
+```
