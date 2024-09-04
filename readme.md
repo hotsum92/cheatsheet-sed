@@ -85,8 +85,10 @@ echo puce | sed 's/scarlet\|ruby\|puce/red/g'       # red
 
 ## need to escape
 
+```
 BRE .[\*^$
 ERE .[\*^$()+?{|
+```
 
 ## oneliners
 
