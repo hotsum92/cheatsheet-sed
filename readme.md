@@ -44,6 +44,24 @@
 | =            | print line number                                                          |
 | :[label]     | define label                                                               |
 
+## BRE ERE
+
+| name                              | BRE            | ERE            |
+| --------------------------------- | -------------- | -------------- |
+| Collation-related bracket symbols | [==] [::] [..] | [==] [::] [..] |
+| Escaped characters                | \              | \              |
+| Bracket expression                | []             | []             |
+| Grouping                          | \(\) \n        | () \n          |
+| Single-character duplication      | * \{m,n\}      | * + ? {m,n}    |
+| Anchoring                         | ^ $            | ^ $            |
+
+## need to escape
+
+```
+BRE .[\*^$
+ERE .[\*^$()+?{|
+```
+
 ### examples
 
 ```
@@ -73,25 +91,7 @@ echo puce | sed 's/scarlet\|ruby\|puce/red/g'       # red
 seq 3 | sed '1!G;h;$!d'                             # 3\n1\n2
 ```
 
-## BRE ERE
-
-| name                              | BRE            | ERE            |
-| --------------------------------- | -------------- | -------------- |
-| Collation-related bracket symbols | [==] [::] [..] | [==] [::] [..] |
-| Escaped characters                | \              | \              |
-| Bracket expression                | []             | []             |
-| Grouping                          | \(\) \n        | () \n          |
-| Single-character duplication      | * \{m,n\}      | * + ? {m,n}    |
-| Anchoring                         | ^ $            | ^ $            |
-
-## need to escape
-
-```
-BRE .[\*^$
-ERE .[\*^$()+?{|
-```
-
-## oneliners
+## usage
 
 ### replace first occurrence
 
