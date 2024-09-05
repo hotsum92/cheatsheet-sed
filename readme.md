@@ -46,20 +46,73 @@
 
 ## BRE ERE
 
-| name                              | BRE            | ERE            |
-| --------------------------------- | -------------- | -------------- |
-| Collation-related bracket symbols | [==] [::] [..] | [==] [::] [..] |
-| Escaped characters                | \              | \              |
-| Bracket expression                | []             | []             |
-| Grouping                          | \(\) \n        | () \n          |
-| Single-character duplication      | * \{m,n\}      | * + ? {m,n}    |
-| Anchoring                         | ^ $            | ^ $            |
+| name                              | BRE              | ERE              |
+| --------------------------------- | ---------------- | ---------------- |
+| Collation-related bracket symbols | `[==] [::] [..]` | `[==] [::] [..]` |
+| Escaped characters                | `\`              | `\`              |
+| Bracket expression                | `[]`             | `[]`             |
+| Grouping                          | `\(\) \n`        | `() \n`          |
+| Single-character duplication      | `* \{m,n\}`      | `* + ? {m,n}`    |
+| Anchoring                         | `^ $`            | `^ $`            |
 
 ## need to escape
 
 ```
 BRE .[\*^$
 ERE .[\*^$()+?{|
+```
+
+## syntax
+
+```
+a       # match the letter a
+\.      # match a literal dot '.'
+\\      # match backslash
+\t      # match tab
+\n      # match newline
+\r      # match carriage return
+^       # match start of pat space
+$       # match end of pat space
+.       # match any character
+[0-9]	# match digit
+\s	# match whitespace
+\w      # match [a-zA-Z0-9_] (word character)
+\W      # match [^a-zA-Z0-9_] (non-word character)
+\b      # match word boundary
+\B      # match non-word boundary
+\<      # match start of word
+\>      # match end of word
+\|      # logical or (alternative pattern)
+*       # zero or more
+\?      # zero or one
+\+      # one or more
+\{n\}   # exactly n matches
+\{n,\}  # n or more matches
+\{,n\}  # zero to n matches
+\{n,m\} # n to m matches
+\(      # open capturing group
+\)      # close capturing group
+\n      # refer to captured group [n]
+&       # refer to complete pattern captured
+$       # last line
+n       # line number n
+!       # inverse addresses
+[]]     # match closing bracket ']'
+[^]]    # match anything but closing bracket
+[-]     # match a literal dash '-'
+[^-]    # match anything but a dash
+```
+
+### substitute flags
+
+```
+i = ignore case
+g = replace all occurrences (instead of first only)
+n = replace the specified occurrence by index (among all matches)
+p = print on match
+w = write matches to file (must be last flag)
+e = execute pat space on command line (gnu extension)
+m = multi line matching mode
 ```
 
 ### examples
