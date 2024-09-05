@@ -182,14 +182,14 @@ sed -r 's/(\b|_)(.)/\u\2/g'
 ls *.bak | sed 's/\(.*\).bak/mv & \1/' | bash
 ```
 
-## fixed string replacement
-
-Only two characters it can't deal with are the null (\x00) and the newline (\x0a)
+## sanitize a string for use in sed
 
 ```
+echo '. [ \ * ^ $' | sed 's/[][\\.*^$]/\\&/g'
+echo '. [ \ * ^ $ ( ) + ? { |' | sed 's/[.\\*^$(){}+?|]/\\&/g'
+
 OUTER_STRING='hello $( string | is [ a ${ crazy } mess ] like wow; end'
 INNER_STRING=' $( string | is [ a ${ crazy } mess ] like wow; en'
-
-echo "$INNER_STRING" | sed 's:[]\[^$.*/]:\\&:g' | cat
+CLEAN_SED_STRING="$(echo "$INNER_STRING" | sed 's:[]\[^$.*/]:\\&:g')"
 echo "$OUTER_STRING" | sed "s/$CLEAN_SED_STRING/ worl/"
 ```
