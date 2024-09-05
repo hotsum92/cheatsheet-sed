@@ -70,6 +70,7 @@ echo '[]' | sed 'y/[]/()/'                          # ()
 seq 3 | sed '1h; 3x;'                               # 1\n2\n1
 seq 3 | sed '=' | sed 'N;s/\n/\t/'                  # 1\t2\n3\t
 echo puce | sed 's/scarlet\|ruby\|puce/red/g'       # red
+seq 3 | sed '1!G;h;$!d'                             # 3\n1\n2
 ```
 
 ## BRE ERE
@@ -91,6 +92,19 @@ ERE .[\*^$()+?{|
 ```
 
 ## oneliners
+
+### replace first occurrence
+
+```
+echo 'foo foo' | sed 's/foo/bar/'
+```
+
+### replace last occurrence
+
+```
+echo 'foo foo' | sed 's/\(.*\)foo/\1bar/'
+echo 'foo foo foo' | sed -E 's/(.*) (foo)/\1 bar/'
+```
 
 ### insert block upper
 
@@ -150,6 +164,10 @@ sed 's/$/\r/'
 echo 1234567 |
 sed -e :a -e 's/\(.*[0-9]\)\([0-9]\{3\}\)/\1,\2/;ta'
 # 1,234,567
+
+echo 1234567 |
+sed -E ':l; s/^([0-9]+)([0-9]{4})/\1,\2/; t l;';
+# 123,4567
 ```
 
 ### camelCase(PascalCase) to snake_case
@@ -192,4 +210,47 @@ OUTER_STRING='hello $( string | is [ a ${ crazy } mess ] like wow; end'
 INNER_STRING=' $( string | is [ a ${ crazy } mess ] like wow; en'
 CLEAN_SED_STRING="$(echo "$INNER_STRING" | sed 's:[]\[^$.*/]:\\&:g')"
 echo "$OUTER_STRING" | sed "s/$CLEAN_SED_STRING/ worl/"
+```
+
+##### extract text inside tag
+
+```
+echo "<h1>test</h1>" |
+grep -o '<h1>.*</h1>' | sed 's#<h1>\(.*\)</h1>#\1#'
+```
+
+##### extract multi text inside tag
+
+```
+echo """
+<head>
+<title>
+A
+B
+C
+</title>
+</head>
+""" | sed -n '/<title>/,/<\/title>/p'
+```
+
+##### extract field
+
+```
+echo 'XXX 2024-10-23 XXX 2024-10-23 XXX' | sed -n 's/.*\(....-..-..\).*\(....-..-..\).*/\1 \2/p'
+```
+
+##### template
+
+```
+_1=A
+_2=B
+template='{ "value": "\1", "value": "\2" }'
+sed -e 's/\\1/'"$_1"'/' -e 's/\\2/'"$_2"'/' <<< "$template"
+```
+
+##### print certain line
+
+```
+seq 20000 |
+sed -n '10000,10005p;'
 ```
