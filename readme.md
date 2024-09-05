@@ -254,3 +254,25 @@ sed -e 's/\\1/'"$_1"'/' -e 's/\\2/'"$_2"'/' <<< "$template"
 seq 20000 |
 sed -n '10000,10005p;'
 ```
+
+#### remote escape newline
+
+```
+echo '1 \
+2
+3 \
+4 \
+5' |
+sed -e :a -e '/\\$/N; s/\\\n//; ta'
+```
+
+### connect comma
+
+```
+echo '1
+,2
+,3
+4
+,5' |
+sed -e :a -e '$!N;s/\n,/,/;ta' -e 'P;D'
+```
