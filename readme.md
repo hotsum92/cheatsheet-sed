@@ -329,3 +329,10 @@ echo '1
 ,5' |
 sed -e :a -e '$!N;s/\n,/,/;ta' -e 'P;D'
 ```
+
+### very last newline
+
+```
+echo -e '1\n2\n3\n' |
+sed -z 's/\n$//'
+```
