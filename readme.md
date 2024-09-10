@@ -336,3 +336,9 @@ sed -e :a -e '$!N;s/\n,/,/;ta' -e 'P;D'
 echo -e '1\n2\n3\n' |
 sed -z 's/\n$//'
 ```
+
+### leading zeros
+
+```sh
+seq 10 | sed -E 's/([0-9]+)/printf "%02d\n" \1/e'
+```
